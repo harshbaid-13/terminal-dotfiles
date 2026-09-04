@@ -1,0 +1,8 @@
+term = xterm-256color
+keyboard-protocol = legacy
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13
+background-opacity = 0.9
+cursor-style = block
+window-padding-x = 10
+window-padding-y = 10
