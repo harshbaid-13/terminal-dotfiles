@@ -2,7 +2,6 @@ local wezterm = require("wezterm")
 local tab_bar_left = require("tab_bar_left")
 local mux = require("mux")
 local keys = require("keys")
-require("utils")
 require("tab_extras")
 require("startup")
 
@@ -15,7 +14,7 @@ config.color_scheme = "nord"
 config.use_fancy_tab_bar = false
 config.font_size = 13
 config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "DemiBold" })
-config.default_workspace = "harsh"
+config.default_workspace = "main"
 config.window_background_opacity = 0.8
 -- config.hide_tab_bar_if_only_one_tab = true
 config.max_fps = 120

@@ -1,0 +1,11 @@
+# Editor / OS clutter
+*.swp
+*~
+.DS_Store
+
+# Never commit secrets by accident
+.env
+*.pem
+*.key
+id_rsa*
+id_ed25519*

@@ -58,13 +58,6 @@ fi
 link_file "$ROOT/zsh/.zshrc" "$HOME/.zshrc"
 link_file "$ROOT/zsh/.zshenv" "$HOME/.zshenv"
 
-link_file "$ROOT/config/ghostty/config" "$HOME/.config/ghostty/config"
-
-mkdir -p "$HOME/.config/kitty"
-for file in "$ROOT"/config/kitty/*; do
-  link_file "$file" "$HOME/.config/kitty/$(basename "$file")"
-done
-
 mkdir -p "$HOME/.config/wezterm"
 for file in "$ROOT"/config/wezterm/*; do
   link_file "$file" "$HOME/.config/wezterm/$(basename "$file")"

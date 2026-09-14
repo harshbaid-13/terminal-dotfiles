@@ -1,96 +1,63 @@
 # Harsh's Terminal Dotfiles
 
-This folder contains the shareable parts of the terminal setup:
+This repo contains the shareable parts of the terminal setup:
 
 - Zsh shell config with Oh My Zsh
 - `zsh-autosuggestions` and `zsh-syntax-highlighting`
 - `zoxide` for the `z` directory-jump feature
 - Starship prompt
 - `eza` aliases with icons
-- Ghostty, WezTerm, and Kitty appearance/config files
-- JetBrainsMono Nerd Font expectation for icons/glyphs
+- WezTerm config (tab bar, workspaces, key bindings)
+- JetBrainsMono Nerd Font for icons/glyphs
 
 It intentionally does not include shell history, SSH keys, tokens, PEM files, Git credentials, or machine-specific cache folders.
 
-## Quick Install
-
-Clone this repo, then run:
+## Quick Start (fresh Ubuntu/Debian machine)
 
 ```bash
-cd terminal-dotfiles
-./install.sh
+git clone git@github.com:harshbaid-13/terminal-dotfiles.git ~/terminal-dotfiles
+cd ~/terminal-dotfiles
+./bootstrap.sh
 ```
 
-Restart the terminal after installation.
+Restart the terminal afterwards. `bootstrap.sh` is safe to re-run; each step skips work that's already done.
 
-## Ubuntu/Debian Dependencies
+Requires Ubuntu 24.04+ or Debian 13+ — older releases don't package `eza` and `zoxide`, so the apt step fails.
 
-Install the basic packages first:
+## What `bootstrap.sh` Does
 
-```bash
-sudo apt update
-sudo apt install -y zsh git curl fzf zoxide eza kitty wezterm
-```
+1. Installs apt packages: `zsh git curl gpg fzf zoxide eza unzip fontconfig`
+2. Adds WezTerm's APT repo (`apt.fury.io/wez`) and installs `wezterm`
+3. Installs Starship (if not already on `PATH`)
+4. Installs Oh My Zsh unattended (if `~/.oh-my-zsh` doesn't exist)
+5. Downloads JetBrainsMono Nerd Font into `~/.local/share/fonts/JetBrainsMono` (if not already installed)
+6. Runs `install.sh`
+7. Sets zsh as the login shell (if it isn't already)
 
-Install Starship:
+Not automated — install these yourself if a machine needs them: CUDA, NVM, Flutter, Android SDK, Bun, Cargo.
 
-```bash
-curl -sS https://starship.rs/install.sh | sh
-```
+## What `install.sh` Does
 
-Install Oh My Zsh if it is not already installed:
+Use this on its own if the dependencies are already installed.
 
-```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
+- Clones `zsh-autosuggestions` and `zsh-syntax-highlighting` into `~/.oh-my-zsh/custom/plugins/` (skipped if Oh My Zsh is missing or the plugin already exists)
+- Creates symlinks from this repo into the home directory:
+  - `zsh/.zshrc` -> `~/.zshrc`
+  - `zsh/.zshenv` -> `~/.zshenv`
+  - `config/wezterm/*` -> `~/.config/wezterm/*`
 
-Install the required Oh My Zsh plugins:
-
-```bash
-git clone https://github.com/zsh-users/zsh-autosuggestions \
-  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-```
-
-Set Zsh as the default shell:
-
-```bash
-chsh -s "$(command -v zsh)"
-```
-
-## Font
-
-Install `JetBrainsMono Nerd Font`. Without a Nerd Font, icons in the prompt, `eza`, Kitty, and WezTerm may show as boxes.
-
-Download from:
-
-```text
-https://www.nerdfonts.com/font-downloads
-```
-
-After installing it, select `JetBrainsMono Nerd Font` in the terminal app.
-
-## What The Installer Does
-
-`install.sh` creates symlinks from this folder into the home directory:
-
-- `zsh/.zshrc` -> `~/.zshrc`
-- `zsh/.zshenv` -> `~/.zshenv`
-- `config/ghostty/config` -> `~/.config/ghostty/config`
-- `config/kitty/*` -> `~/.config/kitty/*`
-- `config/wezterm/*` -> `~/.config/wezterm/*`
-
-Existing files are moved into a timestamped backup folder:
+Existing non-symlink files are moved into a timestamped backup folder:
 
 ```text
 ~/.terminal-dotfiles-backup-YYYYMMDD-HHMMSS
 ```
 
+Because these are symlinks, editing `~/.config/wezterm/keys.lua` (or any linked file) edits the file in this repo directly. Commit and push to carry the change to other machines; after pulling on another machine no re-install is needed unless new files were added.
+
 ## Notes
 
 - The `z` command comes from `zoxide`, initialized by `eval "$(zoxide init zsh)"`.
 - The prompt comes from Starship, initialized by `eval "$(starship init zsh)"`.
-- The `ls` and `la` aliases use `eza --icons`.
-- Flutter, Android SDK, CUDA, Bun, NVM, and Cargo paths are included with guards where possible, but those tools must be installed separately if needed.
+- The `ls` and `la` aliases use `eza --icons` (plain `ls` fallback if `eza` is missing).
+- CUDA, Flutter, Android SDK (`~/android-sdk`), Bun, NVM, and Cargo paths are only added when those tools are present, so the shell starts cleanly on machines without them.
+- `fzf` key bindings (`Ctrl+R` history, `Ctrl+T` files, `Alt+C` cd) and completion come from `eval "$(fzf --zsh)"`; on fzf older than 0.48 it falls back to the Debian-packaged scripts.
