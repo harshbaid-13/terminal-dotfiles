@@ -14,8 +14,8 @@ config.color_scheme = "nord"
 config.use_fancy_tab_bar = false
 config.font_size = 13
 config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "DemiBold" })
-config.default_workspace = "main"
-config.window_background_opacity = 0.8
+config.default_workspace = "harsh"
+config.window_background_opacity = 0.9
 -- config.hide_tab_bar_if_only_one_tab = true
 config.max_fps = 120
 
